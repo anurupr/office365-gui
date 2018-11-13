@@ -1,0 +1,29 @@
+{
+  "name": "office365-gui",
+  "version": "1.0.0",
+  "description": "A gui for basic office 365 admin usage ",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anurupr/office365-gui.git"
+  },
+  "keywords": [
+    "office365",
+    "admin",
+    "gui"
+  ],
+  "author": "Anurup Raveendran",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anurupr/office365-gui/issues"
+  },
+  "homepage": "https://github.com/anurupr/office365-gui#readme",
+  "devDependencies": {
+    "electron": "3.0.9",
+    "electron-reload": "^1.3.0"
+  }
+}
