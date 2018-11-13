@@ -2,7 +2,8 @@
 const {app, BrowserWindow, ipcMain} = require('electron')
 const { exec } = require('child_process')
 const fs = require('fs')
-
+const constants = require('./constants')
+console.log(constants)
 require('electron-reload')(__dirname, {
     // Note that the path to electron may vary according to the main file
     electron: require(`${__dirname}/node_modules/electron`)
@@ -78,7 +79,7 @@ exports.pong = arg => {
 
 ipcMain.on('call-ps-creds', (event, arg) => {
   console.log('calling call-ps-creds')
-  exec('powershell powershell-scripts/Add-Credentials.ps1', (err, stdout, stderr) => {
+  exec(constants.POWERSHELL_COMMAND + ' powershell-scripts/Add-Credentials.ps1', (err, stdout, stderr) => {
     if (err) {
       // node couldn't execute the command
       return;
@@ -91,7 +92,7 @@ ipcMain.on('call-ps-creds', (event, arg) => {
 });
 
 getPSProfile = (cb) => {
-  exec('powershell -command "$profile"', (err, stdout, stderr) => {
+  exec(constants.POWERSHELL_COMMAND + ' -command "$profile"', (err, stdout, stderr) => {
     if (err) { return cb(null) }
     if (stdout) {
       cb(stdout)
@@ -102,7 +103,7 @@ getPSProfile = (cb) => {
 }
 
 getPSCredsFolder = (cb) => {
-  exec('powershell -command "$KeyPath"', (err, stdout, stderr) => {
+  exec(constants.POWERSHELL_COMMAND + ' -command "$KeyPath"', (err, stdout, stderr) => {
     if (err) { console.error(err); return cb(null) }
     if (stdout) {
       cb(stdout)
@@ -119,8 +120,7 @@ ipcMain.on('get-ps-creds', (event, arg) => {
     if (folder != null && folder !== false) {
       fs.readdir(folder.replace(/(\r\n\t|\n|\r\t|\r)/gm,""), (err, files) => {
         if (err) { return  console.error(err) }
-        if (files && files.length > 0) {
-          console.log('event', event.sender.send)
+        if (files && files.length > 0) {        
           mainWindow.webContents.send('get-ps-creds-cb', JSON.stringify(files))
         }
       })
