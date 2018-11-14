@@ -59,8 +59,9 @@ app.on('activate', function () {
   }
 })
 
-app.disableHardwareAcceleration()
 
+app.disableHardwareAcceleration()
+console.log('userDataPath', app.getPath('userData'));
 // Listen for async message from renderer process
 ipcMain.on('async', (event, arg) => {
     // Print 1
