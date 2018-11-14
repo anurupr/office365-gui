@@ -20,7 +20,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
   //mainWindow.setMenu(null)
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -28,6 +28,11 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
+  })
+
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
   })
 }
 
@@ -45,6 +50,7 @@ app.on('window-all-closed', function () {
   }
 })
 
+
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -52,6 +58,8 @@ app.on('activate', function () {
     createWindow()
   }
 })
+
+app.disableHardwareAcceleration()
 
 // Listen for async message from renderer process
 ipcMain.on('async', (event, arg) => {
@@ -93,6 +101,8 @@ ipcMain.on('call-ps-creds', (event, arg) => {
 
 getPSProfile = (cb) => {
   exec(constants.POWERSHELL_COMMAND + ' -command "$profile"', (err, stdout, stderr) => {
+    console.log('stdout ${stdout}')
+    console.log('stderr ${stderr}')
     if (err) { return cb(null) }
     if (stdout) {
       cb(stdout)
@@ -105,6 +115,8 @@ getPSProfile = (cb) => {
 getPSCredsFolder = (cb) => {
   exec(constants.POWERSHELL_COMMAND + ' -command "$KeyPath"', (err, stdout, stderr) => {
     if (err) { console.error(err); return cb(null) }
+    console.log('stdout ${stdout}')
+    console.log('stderr ${stderr}')
     if (stdout) {
       cb(stdout)
     } else if (stderr) {
@@ -120,7 +132,7 @@ ipcMain.on('get-ps-creds', (event, arg) => {
     if (folder != null && folder !== false) {
       fs.readdir(folder.replace(/(\r\n\t|\n|\r\t|\r)/gm,""), (err, files) => {
         if (err) { return  console.error(err) }
-        if (files && files.length > 0) {        
+        if (files && files.length > 0) {
           mainWindow.webContents.send('get-ps-creds-cb', JSON.stringify(files))
         }
       })

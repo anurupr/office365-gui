@@ -3,9 +3,9 @@
 // All of the Node.js APIs are available in this process.
 var {ipcRenderer, remote} = require('electron');
 var main = remote.require("./app.js");
-remote.getCurrentWindow().toggleDevTools();
+//remote.getCurrentWindow().toggleDevTools();
 // Send async message to main process
-ipcRenderer.send('async', 1);
+// ipcRenderer.send('async', 1);
 
 // Listen for async-reply message from main process
 ipcRenderer.on('async-reply', (event, arg) => {
