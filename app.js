@@ -53,6 +53,9 @@ app.on('activate', function () {
   }
 })
 
+
+app.disableHardwareAcceleration()
+console.log('userDataPath', app.getPath('userData'));
 // Listen for async message from renderer process
 ipcMain.on('async', (event, arg) => {
     // Print 1
@@ -120,7 +123,7 @@ ipcMain.on('get-ps-creds', (event, arg) => {
     if (folder != null && folder !== false) {
       fs.readdir(folder.replace(/(\r\n\t|\n|\r\t|\r)/gm,""), (err, files) => {
         if (err) { return  console.error(err) }
-        if (files && files.length > 0) {        
+        if (files && files.length > 0) {
           mainWindow.webContents.send('get-ps-creds-cb', JSON.stringify(files))
         }
       })
